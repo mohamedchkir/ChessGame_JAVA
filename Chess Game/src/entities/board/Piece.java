@@ -1,4 +1,4 @@
-package entities.pieces;
+package entities.board;
 
 
 import enums.PieceSide;

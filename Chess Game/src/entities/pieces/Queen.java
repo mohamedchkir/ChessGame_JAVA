@@ -1,5 +1,6 @@
 package entities.pieces;
 
+import entities.board.Piece;
 import enums.PieceSide;
 
 public class Queen extends Piece {
@@ -9,6 +10,6 @@ public class Queen extends Piece {
 
     @Override
     public String getSymbol() {
-        return getPieceSide().equals(PieceSide.WHITE) ? " ♔ " : " ♚ ";
+        return getPieceSide().equals(PieceSide.WHITE) ? " ♕ " : " ♛ ";
     }
 }

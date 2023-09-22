@@ -1,6 +1,7 @@
 package entities.pieces;
 
 
+import entities.board.Piece;
 import enums.PieceSide;
 
 public class King extends Piece {

@@ -1,4 +1,4 @@
 package entities.board;
 
-public class Position {
+public class Square {
 }
