@@ -9,8 +9,11 @@ public class Main {
         public static void main(String[] args) {
             // Create a new instance of the Board class
             BoardService boardService = new BoardService();
-            // Print the initial chessboard
+
+            
+            boardService.initialBoard();
             boardService.printChessboard();
+            boardService.movePawn();
         }
 
 
