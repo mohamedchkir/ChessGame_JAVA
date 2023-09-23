@@ -10,7 +10,7 @@ public class Main {
             // Create a new instance of the Board class
             BoardService boardService = new BoardService();
 
-            
+
             boardService.initialBoard();
             boardService.printChessboard();
             boardService.movePawn();
