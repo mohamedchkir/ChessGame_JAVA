@@ -14,7 +14,7 @@ public class Pawn extends Piece {
 
     @Override
     public String getSymbol() {
-        return getPieceSide().equals(PieceSide.WHITE) ? " ♙ " : " ♟ ";
+        return getPieceSide().equals(PieceSide.WHITE) ? " p " : " P ";
     }
 
     @Override

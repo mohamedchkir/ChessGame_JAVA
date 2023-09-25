@@ -60,25 +60,31 @@ public class BoardService {
             String columns = "   a   b   c   d   e   f   g   h";
 
             System.out.println("\n\t  => Chess Game <=\n");
-            System.out.println(columns);
 
             for (int row = 0; row < 8; row++) {
                 System.out.print(rows[row] + " ");
                 for (int column = 0; column < 8; column++) {
                     Square square = board[row][column];
-                    String pieceSymbol = (square.getPiece() == null) ? "    " : square.getPiece().getSymbol();
+                    String pieceSymbol = (square.getPiece() == null) ? "   " : square.getPiece().getSymbol();
 
                     // Color the squares
                     String bgColor = (row + column) % 2 == 0 ? "\u001B[48;5;240m" : "\u001B[48;5;235m";
                     String resetColor = "\u001B[0m";
 
-                    System.out.print(bgColor + "[" + pieceSymbol + "]" + resetColor);
+                    System.out.print(bgColor +  pieceSymbol  +" "+ resetColor);
                 }
 
-                System.out.println(" " + rows[row]);
+                System.out.println(" ");
             }
 
             System.out.println(columns);
+    }
+
+
+    private static String centerText(String text) {
+        int terminalWidth = 200;
+        int padding = (terminalWidth - text.length()) / 2;
+        return " ".repeat(Math.max(0, padding)) + text;
     }
 
 
@@ -103,7 +109,12 @@ public class BoardService {
             System.out.println("waaah ina place : ");
             int place = Integer.parseInt(scanner.nextLine());
 
+
             list.get(place).setPiece(chosenSquare.getPiece());
+
+            chosenSquare.setPiece(null);
+
+
         }
 
 }
