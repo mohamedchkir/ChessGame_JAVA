@@ -2,12 +2,13 @@ package domain.entities.pieces;
 
 import domain.entities.board.Piece;
 import domain.entities.board.Square;
+import domain.entities.pieces.movements.RookMovementLogic;
 import domain.enums.PieceSide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Rook extends Piece {
+public class Rook extends Piece implements RookMovementLogic {
 
     public Rook(PieceSide pieceSide) {
         super(pieceSide);
@@ -23,49 +24,7 @@ public class Rook extends Piece {
 
 
     public List<Square> abilityMoves(Square[][] board) {
-        List<Square> squareList = new ArrayList<>();
-        Square actualSquare = this.getSquare();
-        int x = actualSquare.getX();
-        int y = actualSquare.getY();
-
-        // Mouvements vers le haut
-        for (int i = y - 1; i >= 0; i--) {
-            Square square = board[i][x];
-            if (square.getPiece() == null) {
-                squareList.add(square);
-            } else {
-                break;
-            }
-        }
-        
-        for (int i = y + 1; i < 8; i++) {
-            Square square = board[i][x];
-            if (square.getPiece() == null) {
-                squareList.add(square);
-            } else {
-                break;
-            }
-        }
-
-        for (int i = x - 1; i >= 0; i--) {
-            Square square = board[y][i];
-            if (square.getPiece() == null) {
-                squareList.add(square);
-            } else {
-                break;
-            }
-        }
-
-        for (int i = x + 1; i < 8; i++) {
-            Square square = board[y][i];
-            if (square.getPiece() == null) {
-                squareList.add(square);
-            } else {
-                break;
-            }
-        }
-
-        return squareList;
+        return RookMovementLogic.super.getValidMoves(board);
     }
 
 
