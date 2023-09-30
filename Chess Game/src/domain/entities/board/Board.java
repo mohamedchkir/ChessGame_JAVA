@@ -1,8 +1,5 @@
-package entities.board;
+package domain.entities.board;
 
-
-import entities.pieces.*;
-import enums.PieceSide;
 
 public class Board {
 

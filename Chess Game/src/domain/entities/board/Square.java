@@ -1,4 +1,4 @@
-package entities.board;
+package domain.entities.board;
 
 public class Square {
     private int x;

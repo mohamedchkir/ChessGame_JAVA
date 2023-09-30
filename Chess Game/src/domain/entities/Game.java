@@ -1,7 +1,7 @@
-package entities;
+package domain.entities;
 
-import entities.board.Board;
-import enums.GameResult;
+import domain.entities.board.Board;
+import domain.enums.GameResult;
 
 public class Game {
 

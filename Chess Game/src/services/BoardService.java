@@ -1,10 +1,10 @@
 package services;
 
-import entities.board.Board;
-import entities.board.Piece;
-import entities.board.Square;
-import entities.pieces.*;
-import enums.PieceSide;
+import domain.entities.board.Board;
+import domain.entities.board.Piece;
+import domain.entities.board.Square;
+import domain.entities.pieces.*;
+import domain.enums.PieceSide;
 
 import java.util.List;
 import java.util.Scanner;
@@ -84,54 +84,66 @@ public class BoardService {
 
 
     public void movePawn() {
-        System.out.print("Enter the square of the pawn you want to move (e.g., 'e2'): ");
-        String pieceToMove = scanner.nextLine().toLowerCase();
+        while (true) {
+            System.out.print("Enter the piece (e.g., 'e2'): ");
+            String piecePosition = scanner.nextLine().toLowerCase();
 
-        if (pieceToMove.length() != 2 || !pieceToMove.matches("[a-h][1-8]")) {
-            System.out.println("Invalid input. Please enter a valid square (e.g., 'e2').");
-            return;
-        }
+            if (!piecePosition.matches("[a-h][1-8]")) {
+                System.out.println("Invalid input. Please enter a valid piece position (e.g., 'e2').");
+                continue; // Ask for input again
+            }
 
-        int column = pieceToMove.charAt(0) - 'a';
-        int row = 7 - (pieceToMove.charAt(1) - '1');
+            System.out.print("Enter the target position (e.g., 'e4'): ");
+            String targetPosition = scanner.nextLine().toLowerCase();
 
-        Square chosenSquare = board[row][column];
-        Piece chosenPiece = chosenSquare.getPiece();
+            if (!targetPosition.matches("[a-h][1-8]")) {
+                System.out.println("Invalid input. Please enter a valid target position (e.g., 'e4').");
+                continue; // Ask for input again
+            }
 
-        if (chosenPiece == null) {
-            System.out.println("Invalid move. Please select a square with a piece.");
-            return;
-        }
+            int pieceColumn = piecePosition.charAt(0) - 'a';
+            int pieceRow = 7 - (piecePosition.charAt(1) - '1');
 
-        List<Square> validMoves = chosenPiece.abilityMoves(board);
+            int targetColumn = targetPosition.charAt(0) - 'a';
+            int targetRow = 7 - (targetPosition.charAt(1) - '1');
 
-        if (validMoves.isEmpty()) {
-            System.out.println("No valid moves for the selected pawn.");
-            return;
-        }
+            Square chosenSquare = board[pieceRow][pieceColumn];
+            Piece chosenPiece = chosenSquare.getPiece();
 
-        System.out.println("Valid moves for the selected pawn:");
-        for (int i = 0; i < validMoves.size(); i++) {
-            System.out.println(i + ": " + validMoves.get(i));
-        }
+            if (chosenPiece == null) {
+                System.out.println("Invalid move. Please select a square with a piece.");
+                continue; // Ask for input again
+            }
 
-        System.out.print("Enter the number of the move you want to make: ");
-        int moveIndex = Integer.parseInt(scanner.nextLine());
+            List<Square> validMoves = chosenPiece.abilityMoves(board);
 
-        if (moveIndex < 0 || moveIndex >= validMoves.size()) {
-            System.out.println("Invalid move number. Please enter a valid move number.");
-            return;
-        }
+            boolean validMoveFound = false;
+            for (Square square : validMoves) {
+                if (square.getX() == targetColumn && square.getY() == targetRow) {
+                    validMoveFound = true;
+                    break;
+                }
+            }
 
-        Square targetSquare = validMoves.get(moveIndex);
-        targetSquare.setPiece(chosenPiece);
-        chosenSquare.setPiece(null);
+            if (!validMoveFound) {
+                System.out.println("Invalid move. The selected piece cannot move to the target position.");
+                continue; // Ask for input again
+            }
 
-        //To change the piece
-        if (targetSquare.getY() == 0 || targetSquare.getY() == 7) {
-            promotePawn(targetSquare);
+            Square targetSquare = board[targetRow][targetColumn];
+            targetSquare.setPiece(chosenPiece);
+            chosenSquare.setPiece(null);
+
+            // To change the piece
+            if (targetRow == 0 || targetRow == 7) {
+                promotePawn(targetSquare);
+            }
+
+            // The move was successful; exit the loop
+            break;
         }
     }
+
 
     private void promotePawn(Square square) {
         System.out.println("Pawn promotion! Enter the piece to promote to (Q, R, N, or B): ");

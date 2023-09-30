@@ -1,8 +1,8 @@
-package entities.pieces;
+package domain.entities.pieces;
 
-import entities.board.Piece;
-import entities.board.Square;
-import enums.PieceSide;
+import domain.entities.board.Piece;
+import domain.entities.board.Square;
+import domain.enums.PieceSide;
 
 import java.util.List;
 

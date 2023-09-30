@@ -1,6 +1,6 @@
-package entities.board;
+package domain.entities.board;
 
-import enums.PieceSide;
+import domain.enums.PieceSide;
 import java.util.List;
 
 public abstract class Piece {
