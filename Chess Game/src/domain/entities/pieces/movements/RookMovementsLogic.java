@@ -6,7 +6,7 @@ import java.util.List;
 import domain.entities.board.Piece;
 import domain.entities.board.Square;
 
-public interface RookMovementLogic {
+public interface RookMovementsLogic {
 
     default List<Square> getValidMoves(Square[][] board){
         Piece rook = (Piece) this;
@@ -16,7 +16,7 @@ public interface RookMovementLogic {
         int x = actualSquare.getX();
         int y = actualSquare.getY();
 
-        // Mouvements vers le haut
+        // Movements vers le haut
         for (int i = y - 1; i >= 0; i--) {
             Square square = board[i][x];
             if (square.getPiece() == null) {
