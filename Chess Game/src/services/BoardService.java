@@ -8,7 +8,6 @@ import domain.enums.PieceSide;
 
 import java.util.List;
 import java.util.Scanner;
-import static java.lang.Math.abs;
 
 public class BoardService {
 
@@ -16,7 +15,8 @@ public class BoardService {
     private final Scanner scanner = new Scanner(System.in);
     private Square[][] board = boardEntity.getBoard();
 
-    public BoardService() {
+    public BoardService(Board boardEntity) {
+        this.board =boardEntity.getBoard();
         initialBoard();
     }
 

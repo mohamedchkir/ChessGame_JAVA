@@ -17,6 +17,10 @@ public class Game {
         this.result = result;
     }
 
+    public Game() {
+
+    }
+
     public Board getBoard() {
         return board;
     }
