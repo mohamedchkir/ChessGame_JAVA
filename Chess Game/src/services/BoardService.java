@@ -1,6 +1,7 @@
 package services;
 
 import domain.entities.board.Board;
+import domain.entities.board.Move;
 import domain.entities.board.Piece;
 import domain.entities.board.Square;
 import domain.entities.pieces.*;
@@ -173,5 +174,39 @@ public class BoardService {
         square.setPiece(newPiece);
     }
 
+
+    public boolean applyMove(Move move) {
+        Square sourceSquare = move.getStartPosition();
+        Square targetSquare = move.getEndPosition();
+        Piece pieceToMove = move.getPiece();
+        Piece capturedPiece = move.getCapturedPiece();
+
+        if (!isValidMove(sourceSquare, targetSquare)){
+            System.out.println("Invalid move. This piece cannot move to the target square.");
+            return false;
+        }
+
+        sourceSquare.setPiece(null);
+        pieceToMove.setMoved(true);
+        targetSquare.setPiece(pieceToMove);
+
+        // check for promoted the pawn
+        if (pieceToMove instanceof Pawn) {
+            if (targetSquare.getY() == 0 || targetSquare.getY() == 7){
+                ((Pawn) pieceToMove).promotePawn();
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isValidMove(Square sourceSquare, Square targetSquare) {
+        Piece pieceToMove = sourceSquare.getPiece();
+        List<Square> validMoves = pieceToMove.abilityMoves(board);
+
+        return validMoves.contains(targetSquare);
+    }
 }
+
+
 

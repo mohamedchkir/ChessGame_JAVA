@@ -3,6 +3,7 @@ package domain.entities.pieces.movements;
 import domain.entities.board.Piece;
 import domain.entities.board.Square;
 import domain.enums.PieceSide;
+import services.InputService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,5 +38,13 @@ public interface PawnMovementsLogic {
         }
 
         return squareList;
+    }
+
+    default void promotePawn() {
+        Piece pawn = (Piece) this;
+        Piece chosenPiece = pawn.getSquare().getPiece();
+        Piece newPiece = InputService.getPromotePawn(chosenPiece.getPieceSide());
+
+        pawn.getSquare().setPiece(newPiece);
     }
 }
