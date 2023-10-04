@@ -1,6 +1,8 @@
 package domain.entities.board;
 
-public class Square {
+import domain.entities.pieces.movements.CheckLogic;
+
+public class Square implements CheckLogic {
     private int x;
     private int y;
     private Piece piece;

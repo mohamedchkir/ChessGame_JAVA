@@ -33,7 +33,8 @@ public interface KingMovementsLogic {
 
                 if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8) {
                     Square square = board[newY][newX];
-                    if (square.getPiece() == null || square.getPiece().getPieceSide() != king.getPieceSide()) {
+                    if ((square.getPiece() == null || square.getPiece().getPieceSide() != king.getPieceSide() && !square.onCheck(board, king.getPieceSide()))) {
+
                         squareList.add(square);
                     }
                 }
