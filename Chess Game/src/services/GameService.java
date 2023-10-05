@@ -14,10 +14,8 @@ public class GameService {
 
     private Game game = new Game();
     private final Board boardEntity = new Board();
-    private static final String namePlayerRegex = "^(?=.{3,10}$)[A-Za-z]+(?:\\s[A-Za-z]+)?$";
     private final BoardService boardService = new BoardService(boardEntity);
 
-    Scanner sc = new Scanner(System.in);
     private PieceSide currentPlayer = PieceSide.WHITE;
 
     private String whitePlayer ;

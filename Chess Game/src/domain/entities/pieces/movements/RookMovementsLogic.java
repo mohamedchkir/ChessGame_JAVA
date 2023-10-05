@@ -21,6 +21,9 @@ public interface RookMovementsLogic {
             Square square = board[i][x];
             if (square.getPiece() == null) {
                 squareList.add(square);
+            } else if (square.getPiece().getPieceSide() != rook.getPieceSide()) {
+                squareList.add(square);
+                break;
             } else {
                 break;
             }
@@ -30,6 +33,9 @@ public interface RookMovementsLogic {
             Square square = board[i][x];
             if (square.getPiece() == null) {
                 squareList.add(square);
+            } else if (square.getPiece().getPieceSide() != rook.getPieceSide()) {
+                squareList.add(square);
+                break;
             } else {
                 break;
             }
@@ -39,6 +45,9 @@ public interface RookMovementsLogic {
             Square square = board[y][i];
             if (square.getPiece() == null) {
                 squareList.add(square);
+            } else if (square.getPiece().getPieceSide() != rook.getPieceSide()) {
+                squareList.add(square);
+                break;
             } else {
                 break;
             }
@@ -48,6 +57,9 @@ public interface RookMovementsLogic {
             Square square = board[y][i];
             if (square.getPiece() == null) {
                 squareList.add(square);
+            } else if (square.getPiece().getPieceSide() != rook.getPieceSide()) {
+                squareList.add(square);
+                break;
             } else {
                 break;
             }
