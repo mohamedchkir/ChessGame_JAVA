@@ -16,6 +16,8 @@ public class BoardService {
     private final Scanner scanner = new Scanner(System.in);
     private Square[][] board = boardEntity.getBoard();
 
+    private Piece enPassantVulnerable = null;
+
     public BoardService(Board boardEntity) {
         this.board =boardEntity.getBoard();
         initialBoard();
@@ -181,24 +183,48 @@ public class BoardService {
         Piece pieceToMove = move.getPiece();
         Piece capturedPiece = move.getCapturedPiece();
 
-        if (!isValidMove(sourceSquare, targetSquare)){
-            System.out.println("Invalid move. This piece cannot move to the target square.");
-            return false;
+        if (!isValidMove(sourceSquare, targetSquare)) {
+
+        // check for en passant
+        boolean isTargetInRangeForEnPassant = Math.abs(sourceSquare.getX() - targetSquare.getX()) == 1 && Math.abs(sourceSquare.getY() - targetSquare.getY()) == 1;
+        if (pieceToMove instanceof Pawn && capturedPiece == null && isTargetInRangeForEnPassant) {
+            int operation = pieceToMove.getPieceSide().equals(PieceSide.WHITE) ? 1 : -1;
+            Piece opponentPawn = board[targetSquare.getY() + operation][targetSquare.getX()].getPiece();
+
+            if (opponentPawn == enPassantVulnerable) {
+                sourceSquare.setPiece(null);
+                pieceToMove.setMoved(true);
+                targetSquare.setPiece(pieceToMove);
+
+                opponentPawn.getSquare().setPiece(null);
+
+                return true;
+            }
         }
+
+        System.out.println("Invalid move. This piece cannot move to the target square.");
+        return false;
+    }
+
+    // check for promoted the pawn
+        if (pieceToMove instanceof Pawn) {
+        if (!pieceToMove.isMoved() && Math.abs(sourceSquare.getY() - targetSquare.getY()) == 2) {
+            enPassantVulnerable = pieceToMove;
+        } else {
+            enPassantVulnerable = null;
+        }
+
+        if (targetSquare.getY() == 0 || targetSquare.getY() == 7) {
+            ((Pawn) pieceToMove).promotePawn();
+        }
+    }
 
         sourceSquare.setPiece(null);
         pieceToMove.setMoved(true);
         targetSquare.setPiece(pieceToMove);
 
-        // check for promoted the pawn
-        if (pieceToMove instanceof Pawn) {
-            if (targetSquare.getY() == 0 || targetSquare.getY() == 7){
-                ((Pawn) pieceToMove).promotePawn();
-            }
-        }
-
         return true;
-    }
+}
 
     public boolean isValidMove(Square sourceSquare, Square targetSquare) {
         Piece pieceToMove = sourceSquare.getPiece();

@@ -72,9 +72,8 @@ public class GameService {
 
 
     private boolean isGameEnd() {
-        // Check for game end conditions (e.g., checkmate, stalemate)
-        // ...
-        return false; // Modify this based on your game logic
+
+        return false;
     }
 
     public Player getCurrentPlayer(){

@@ -19,6 +19,7 @@ public interface CheckLogic {
                     List<Square> squareList = piece.abilityMoves(board);
 
                     if (squareList.contains(square)) {
+
                         return true;
                     }
                 }
