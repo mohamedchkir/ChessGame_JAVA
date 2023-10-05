@@ -81,7 +81,7 @@ public class GameService {
     }
 
     public void switchPlayer(){
-        currentPlayer = currentPlayer.equals(PieceSide.WHITE) ? PieceSide.WHITE : PieceSide.BLACK;
+        currentPlayer = currentPlayer.equals(PieceSide.WHITE) ? PieceSide.BLACK : PieceSide.WHITE;
     }
 
     public boolean checkSquare(Square square){
