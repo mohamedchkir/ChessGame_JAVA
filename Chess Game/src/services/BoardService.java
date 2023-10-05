@@ -207,16 +207,17 @@ public class BoardService {
     }
 
     // check for promoted the pawn
-        if (pieceToMove instanceof Pawn) {
-        if (!pieceToMove.isMoved() && Math.abs(sourceSquare.getY() - targetSquare.getY()) == 2) {
+
+        if (pieceToMove instanceof Pawn && !pieceToMove.isMoved() && Math.abs(sourceSquare.getY() - targetSquare.getY()) == 2) {
             enPassantVulnerable = pieceToMove;
         } else {
             enPassantVulnerable = null;
         }
 
-        if (targetSquare.getY() == 0 || targetSquare.getY() == 7) {
+        if (pieceToMove instanceof Pawn && targetSquare.getY() == 0 || targetSquare.getY() == 7) {
+
+            assert pieceToMove instanceof Pawn;
             ((Pawn) pieceToMove).promotePawn();
-        }
     }
 
         sourceSquare.setPiece(null);
