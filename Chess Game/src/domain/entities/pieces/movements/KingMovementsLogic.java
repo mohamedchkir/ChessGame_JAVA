@@ -5,6 +5,7 @@ import domain.entities.board.Square;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public interface KingMovementsLogic {
     default List<Square> getValidMoves(Square[][] board){
@@ -42,5 +43,27 @@ public interface KingMovementsLogic {
 
             return squareList;
 
+    }
+
+    default boolean possibleToCastle(Square[][] squares ,Square square){
+        Piece king = (Piece) this;
+        Piece rook = square.getPiece();
+
+        if (king.isMoved() || rook.isMoved() || king.getPieceSide() != rook.getPieceSide()){
+            return false;
+        }
+
+        int starX = Math.min(king.getSquare().getX(), rook.getSquare().getX()) + 1;
+        int endX = Math.min(king.getSquare().getX(), rook.getSquare().getX());
+
+        int kingY = king.getSquare().getY();
+
+        for (int i =starX ; i<endX ; i++){
+            if(squares[kingY][i].getPiece() != null){
+                return false;
+            }
+        }
+
+        return true;
     }
 }

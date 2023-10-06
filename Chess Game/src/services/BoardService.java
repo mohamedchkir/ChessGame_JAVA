@@ -41,7 +41,7 @@ public class BoardService {
         board[0][6].setPiece(new Knight(PieceSide.BLACK));
         board[0][7].setPiece(new Rook(PieceSide.BLACK));
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             board[1][i].setPiece(new Pawn(PieceSide.BLACK));
         }
 
@@ -53,7 +53,7 @@ public class BoardService {
         board[7][5].setPiece(new Bishop(PieceSide.WHITE));
         board[7][6].setPiece(new Knight(PieceSide.WHITE));
         board[7][7].setPiece(new Rook(PieceSide.WHITE));
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             board[6][i].setPiece(new Pawn(PieceSide.WHITE));
         }
 
@@ -64,7 +64,7 @@ public class BoardService {
             String[] rows = {"8", "7", "6", "5", "4", "3", "2", "1"};
             String columns = "   a   b   c   d   e   f   g   h";
 
-            System.out.println("\n\t Chess Game \n");
+            System.out.println("\n\t\t\t\t\tChess Game \n");
 
             for (int row = 0; row < 8; row++) {
                 System.out.print(rows[row] + " ");
@@ -112,7 +112,22 @@ public class BoardService {
         }
 
        // Check for castling
+            if (pieceToMove instanceof King && capturedPiece instanceof Rook) {
+                King king = (King) pieceToMove;
 
+                if (king.possibleToCastle(board, targetSquare)) {
+                    int isCastleQueenSide = targetSquare.getX() == 0 ? -1 : 1;
+                    board[sourceSquare.getY()][sourceSquare.getX() + 2 * isCastleQueenSide].setPiece(king);
+                    sourceSquare.setPiece(null);
+                    king.setMoved(true);
+
+                    board[sourceSquare.getY()][sourceSquare.getX() + isCastleQueenSide].setPiece(capturedPiece);
+                    targetSquare.setPiece(null);
+                    capturedPiece.setMoved(true);
+
+                    return true;
+                }
+            }
 
         System.out.println("Invalid move. This piece cannot move to the target square.");
         return false;
