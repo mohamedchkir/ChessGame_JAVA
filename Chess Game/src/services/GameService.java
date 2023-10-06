@@ -39,7 +39,7 @@ public class GameService {
 
         while (true) {
             boardService.printChessboard();
-            System.out.println(getCurrentPlayer() + " turn's - " + currentPlayer + "\n");
+            System.out.println(getCurrentPlayer().getName()+ " turn's - " + currentPlayer + "\n");
 
             // Get input from the current player (e.g., source and target squares)
             Square sourceSquare = InputService.getSquareInput(boardEntity);
@@ -56,14 +56,12 @@ public class GameService {
             // Check for game end conditions (e.g., checkmate, stalemate)
             if (isGameEnd()) {
                 break;
-            }
+                }
 
             // Switch to the next player's turn
             switchPlayer();
-        }
+            }
 
-
-            
         }
 
 

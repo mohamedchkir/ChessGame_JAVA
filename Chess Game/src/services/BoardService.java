@@ -8,6 +8,7 @@ import domain.entities.pieces.*;
 import domain.enums.PieceSide;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class BoardService {
@@ -40,7 +41,7 @@ public class BoardService {
         board[0][6].setPiece(new Knight(PieceSide.BLACK));
         board[0][7].setPiece(new Rook(PieceSide.BLACK));
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 4; i++) {
             board[1][i].setPiece(new Pawn(PieceSide.BLACK));
         }
 
@@ -52,7 +53,7 @@ public class BoardService {
         board[7][5].setPiece(new Bishop(PieceSide.WHITE));
         board[7][6].setPiece(new Knight(PieceSide.WHITE));
         board[7][7].setPiece(new Rook(PieceSide.WHITE));
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 4; i++) {
             board[6][i].setPiece(new Pawn(PieceSide.WHITE));
         }
 
@@ -63,7 +64,7 @@ public class BoardService {
             String[] rows = {"8", "7", "6", "5", "4", "3", "2", "1"};
             String columns = "   a   b   c   d   e   f   g   h";
 
-            System.out.println("\n\t  => Chess Game <=\n");
+            System.out.println("\n\t Chess Game \n");
 
             for (int row = 0; row < 8; row++) {
                 System.out.print(rows[row] + " ");
@@ -110,27 +111,39 @@ public class BoardService {
             }
         }
 
+       // Check for castling
+
+
         System.out.println("Invalid move. This piece cannot move to the target square.");
         return false;
     }
 
     // check for promoted the pawn
-
         if (pieceToMove instanceof Pawn && !pieceToMove.isMoved() && Math.abs(sourceSquare.getY() - targetSquare.getY()) == 2) {
             enPassantVulnerable = pieceToMove;
         } else {
             enPassantVulnerable = null;
         }
 
-        if (pieceToMove instanceof Pawn && targetSquare.getY() == 0 || targetSquare.getY() == 7) {
+        if (pieceToMove instanceof Pawn && (targetSquare.getY() == 0 || targetSquare.getY() == 7)) {
 
-            assert pieceToMove instanceof Pawn;
             ((Pawn) pieceToMove).promotePawn();
     }
 
         sourceSquare.setPiece(null);
         pieceToMove.setMoved(true);
         targetSquare.setPiece(pieceToMove);
+
+        // check the square after moving the piece
+        if (findMyKing(board,pieceToMove.getPieceSide()).onCheck(board,pieceToMove.getPieceSide())){
+
+            System.out.println("You can not move the piece ,you are checked");
+            sourceSquare.setPiece(pieceToMove);
+            pieceToMove.setMoved(false);
+            targetSquare.setPiece(capturedPiece);
+
+            return false ;
+        }
 
         return true;
 }
@@ -140,6 +153,22 @@ public class BoardService {
         List<Square> validMoves = pieceToMove.abilityMoves(board);
 
         return validMoves.contains(targetSquare);
+
+    }
+
+
+    public Square findMyKing(Square[][] board , PieceSide side){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = board[i][j].getPiece();
+
+                if (piece instanceof King && side.equals(piece.getPieceSide()) ){
+                    return piece.getSquare();
+                }
+
+            }
+        }
+        return null;
     }
 }
 
