@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+import static domain.enums.PieceSide.*;
+
 public class BoardService {
 
     private final Board boardEntity = new Board();
@@ -45,45 +47,50 @@ public class BoardService {
             board[1][i].setPiece(new Pawn(PieceSide.BLACK));
         }
 
-        board[7][0].setPiece(new Rook(PieceSide.WHITE));
-        board[7][1].setPiece(new Knight(PieceSide.WHITE));
-        board[7][2].setPiece(new Bishop(PieceSide.WHITE));
-        board[7][3].setPiece(new Queen(PieceSide.WHITE));
-        board[7][4].setPiece(new King(PieceSide.WHITE));
-        board[7][5].setPiece(new Bishop(PieceSide.WHITE));
-        board[7][6].setPiece(new Knight(PieceSide.WHITE));
-        board[7][7].setPiece(new Rook(PieceSide.WHITE));
+        board[7][0].setPiece(new Rook(WHITE));
+        board[7][1].setPiece(new Knight(WHITE));
+        board[7][2].setPiece(new Bishop(WHITE));
+        board[7][3].setPiece(new Queen(WHITE));
+        board[7][4].setPiece(new King(WHITE));
+        board[7][5].setPiece(new Bishop(WHITE));
+        board[7][6].setPiece(new Knight(WHITE));
+        board[7][7].setPiece(new Rook(WHITE));
         for (int i = 0; i < 8; i++) {
-            board[6][i].setPiece(new Pawn(PieceSide.WHITE));
+            board[6][i].setPiece(new Pawn(WHITE));
         }
 
     }
 
 
-    public void printChessboard () {
-            String[] rows = {"8", "7", "6", "5", "4", "3", "2", "1"};
-            String columns = "   a   b   c   d   e   f   g   h";
+    public void printChessboard() {
+        String[] rows = {"8", "7", "6", "5", "4", "3", "2", "1"};
+        String columns = "   a  b  c  d  e  f  g  h";
 
-            System.out.println("\n\t\t\t\t\tChess Game \n");
+        System.out.println("\n\t\tChess Game \n");
 
-            for (int row = 0; row < 8; row++) {
-                System.out.print(rows[row] + " ");
-                for (int column = 0; column < 8; column++) {
-                    Square square = board[row][column];
-                    String pieceSymbol = (square.getPiece() == null) ? "   " : square.getPiece().getSymbol();
+        for (int row = 0; row < 8; row++) {
+            System.out.print(rows[row] + " ");
+            for (int column = 0; column < 8; column++) {
+                Square square = board[row][column];
+                String pieceSymbol = (square.getPiece() == null) ? "   " : square.getPiece().getSymbol();
+                String pieceColor = (square.getPiece() != null && square.getPiece().getPieceSide() == WHITE) ? "\u001B[97m" : "\u001B[30m"; // White text for white pieces, black text for black pieces
 
-                    // Color the squares
-                    String bgColor = (row + column) % 2 == 0 ? "\u001B[48;5;240m" : "\u001B[48;5;235m";
-                    String resetColor = "\u001B[0m";
+                // Color the squares with light and dark colors
+                String bgColor = (row + column) % 2 == 0 ? "\u001B[48;5;94m" : "\u001B[48;5;208m";  // Brown and light orange colors
+                String resetColor = "\u001B[0m";
 
-                    System.out.print(bgColor +  pieceSymbol  +" "+ resetColor);
-                }
-
-                System.out.println(" ");
+                System.out.print(bgColor + pieceColor + pieceSymbol + resetColor );
             }
 
-            System.out.println(columns);
+            System.out.println(" ");
+        }
+
+        System.out.println(columns);
     }
+
+
+
+
 
 
     public boolean applyMove(Move move) {
@@ -97,7 +104,7 @@ public class BoardService {
         // check for en passant
         boolean isTargetInRangeForEnPassant = Math.abs(sourceSquare.getX() - targetSquare.getX()) == 1 && Math.abs(sourceSquare.getY() - targetSquare.getY()) == 1;
         if (pieceToMove instanceof Pawn && capturedPiece == null && isTargetInRangeForEnPassant) {
-            int operation = pieceToMove.getPieceSide().equals(PieceSide.WHITE) ? 1 : -1;
+            int operation = pieceToMove.getPieceSide().equals(WHITE) ? 1 : -1;
             Piece opponentPawn = board[targetSquare.getY() + operation][targetSquare.getX()].getPiece();
 
             if (opponentPawn == enPassantVulnerable) {

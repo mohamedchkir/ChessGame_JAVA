@@ -54,7 +54,7 @@ public interface KingMovementsLogic {
         }
 
         int starX = Math.min(king.getSquare().getX(), rook.getSquare().getX()) + 1;
-        int endX = Math.min(king.getSquare().getX(), rook.getSquare().getX());
+        int endX = Math.max(king.getSquare().getX(), rook.getSquare().getX());
 
         int kingY = king.getSquare().getY();
 
