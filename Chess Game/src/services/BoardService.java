@@ -50,9 +50,9 @@ public class BoardService {
         board[7][0].setPiece(new Rook(WHITE));
         board[7][1].setPiece(new Knight(WHITE));
         board[7][2].setPiece(new Bishop(WHITE));
-        board[7][3].setPiece(new Queen(WHITE));
+        board[5][5].setPiece(new Queen(WHITE));
         board[7][4].setPiece(new King(WHITE));
-        board[7][5].setPiece(new Bishop(WHITE));
+        board[4][2].setPiece(new Bishop(WHITE));
         board[7][6].setPiece(new Knight(WHITE));
         board[7][7].setPiece(new Rook(WHITE));
         for (int i = 0; i < 8; i++) {

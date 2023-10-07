@@ -4,9 +4,12 @@ import domain.entities.Game;
 import domain.entities.Player;
 import domain.entities.board.Board;
 import domain.entities.board.Move;
+import domain.entities.board.Piece;
 import domain.entities.board.Square;
+import domain.enums.GameResult;
 import domain.enums.PieceSide;
 
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -18,13 +21,11 @@ public class GameService {
 
     private PieceSide currentPlayer = PieceSide.WHITE;
 
-    private String whitePlayer ;
-    private String blackPlayer;
     public void startGame() {
 
         // firstly, get names of player's
-        whitePlayer = InputService.getPlayerName("White");
-        blackPlayer = InputService.getPlayerName("Black");
+        String whitePlayer = InputService.getPlayerName("White");
+        String blackPlayer = InputService.getPlayerName("Black");
 
         game.setWhitePlayer(new Player(whitePlayer));
         game.setBlackPlayer(new Player(blackPlayer));
@@ -54,7 +55,7 @@ public class GameService {
             if(!boardService.applyMove(move)) continue;
 
             // Check for game end conditions (e.g., checkmate, stalemate)
-            if (isGameEnd()) {
+            if (gameEnd()) {
                 break;
                 }
 
@@ -67,7 +68,20 @@ public class GameService {
 
 
 
-    private boolean isGameEnd() {
+    private boolean gameEnd() {
+
+        PieceSide opponentSide = (currentPlayer == PieceSide.WHITE) ? PieceSide.BLACK : PieceSide.WHITE;
+        Square[][] board = boardEntity.getBoard();
+
+        if (isCheckmate(board, opponentSide)) {
+            System.out.println("Checkmate! " + getCurrentPlayer().getName() + " wins the game!");
+            game.setResult(currentPlayer.equals(PieceSide.WHITE) ? GameResult.WHITE_WIN : GameResult.BLACK_WIN);
+            return true;
+        } else if (isStalemate(board, opponentSide)) {
+            System.out.println("Stalemate! The game ends in a draw.");
+            game.setResult(GameResult.DRAW);
+            return true;
+        }
 
         return false;
     }
@@ -93,6 +107,63 @@ public class GameService {
 
             return false;
         }
+        return true;
+    }
+
+    // Check if the opponent is in checkmate
+    public boolean isCheckmate(Square[][] board, PieceSide side) {
+        Square opponentKingSquare = boardService.findMyKing(board,side);
+
+        if (!opponentKingSquare.onCheck(board, side)) {
+            return false;
+        }
+
+        // Check if any move by the opponent can get out of check
+        return isCurrentPlayerHasLegalMoves(board, side);
+    }
+
+    // Check if the game is in stalemate
+    private boolean isStalemate(Square[][] board, PieceSide side) {
+        Square opponentKingSquare = boardService.findMyKing(board,side);
+
+        if (opponentKingSquare.onCheck(board, side)) {
+            return false;
+        }
+
+        // Check for stalemate
+        return isCurrentPlayerHasLegalMoves(board, side);
+    }
+
+    // Check if the current player has legal moves to make
+    private boolean isCurrentPlayerHasLegalMoves(Square[][] board, PieceSide side) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Square sourceSquare = boardEntity.getSquare(row, col);
+                Piece piece = sourceSquare.getPiece();
+
+                if (piece != null && piece.getPieceSide() == side) {
+                    List<Square> validMoves = piece.abilityMoves(board);
+
+                    for (Square targetSquare : validMoves) {
+                        // Make the move
+                        Piece capturedPiece = targetSquare.getPiece();
+                        targetSquare.setPiece(piece);
+                        sourceSquare.setPiece(null);
+
+                        boolean inCheck = boardService.findMyKing(board,side).onCheck(board, side);
+
+                        // Undo the move
+                        sourceSquare.setPiece(piece);
+                        targetSquare.setPiece(capturedPiece);
+
+                        if (!inCheck) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
         return true;
     }
 }
