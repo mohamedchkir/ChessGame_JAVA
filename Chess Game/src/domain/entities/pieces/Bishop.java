@@ -21,4 +21,5 @@ public class Bishop extends Piece implements BishopMovementsLogic {
     public List<Square> abilityMoves(Square[][] board) {
         return BishopMovementsLogic.super.getValidMoves(board);
     }
+
 }
